@@ -1,0 +1,69 @@
+/**
+ * @param {character[][]} board
+ * @param {string[]} words
+ * @return {string[]}
+ */
+var findWords = function(board, words) {
+  let row = board.length;
+  if (row === 0) return [];
+  let col = board[0].length;
+  if (words.length === 0) return [];
+  let trie = new Trie();
+  words.forEach(word => trie.insert(word));
+  let result = [];
+  let visited = Array.from(Array(row), () => Array(col).fill(false));
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      DFS(board, visited, i, j, "", trie, result);
+    }
+  }
+  return [...new Set(result)];
+};
+
+var Trie = function() {
+  let root = {};
+
+  let insert = function(word) {
+    let cur = root;
+    for (let ch of word) {
+      cur = cur[ch] = cur[ch] || {};
+    }
+    cur.isWord = true;
+  };
+
+  let traverse = function(word) {
+    let cur = root;
+    for (let ch of word) {
+      if (!cur) return false;
+      cur = cur[ch];
+    }
+    return cur;
+  };
+
+  let search = function(word) {
+    let node = traverse(word);
+    return !!node && !!node.isWord;
+  };
+
+  let startWith = function(prefix) {
+    return !!traverse(prefix);
+  };
+
+  return { insert, search, startWith };
+};
+
+var DFS = function(board, visited, i, j, str, trie, result) {
+  if (i < 0 || i >= board.length || j < 0 || j >= board[0].length) return;
+  if (visited[i][j]) return;
+  str += board[i][j];
+  if (!trie.startWith(str)) return;
+  if (trie.search(str)) {
+    result.push(str);
+  }
+  visited[i][j] = true;
+  DFS(board, visited, i - 1, j, str, trie, result);
+  DFS(board, visited, i + 1, j, str, trie, result);
+  DFS(board, visited, i, j + 1, str, trie, result);
+  DFS(board, visited, i, j - 1, str, trie, result);
+  visited[i][j] = false;
+};
