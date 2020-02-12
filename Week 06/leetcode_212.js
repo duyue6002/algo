@@ -52,6 +52,9 @@ var Trie = function() {
   return { insert, search, startWith };
 };
 
+let dx = [-1, 1, 0, 0];
+let dy = [0, 0, -1, 1];
+
 var DFS = function(board, visited, i, j, str, trie, result) {
   if (i < 0 || i >= board.length || j < 0 || j >= board[0].length) return;
   if (visited[i][j]) return;
@@ -61,9 +64,21 @@ var DFS = function(board, visited, i, j, str, trie, result) {
     result.push(str);
   }
   visited[i][j] = true;
-  DFS(board, visited, i - 1, j, str, trie, result);
-  DFS(board, visited, i + 1, j, str, trie, result);
-  DFS(board, visited, i, j + 1, str, trie, result);
-  DFS(board, visited, i, j - 1, str, trie, result);
+
+  for (let k = 0; k < 4; k++) {
+    let x = i + dx[k],
+      y = j + dy[k];
+    DFS(board, visited, x, y, str, trie, result);
+  }
   visited[i][j] = false;
 };
+
+let board = [
+  ["o", "a", "a", "n"],
+  ["e", "t", "a", "e"],
+  ["i", "h", "k", "r"],
+  ["i", "f", "l", "v"]
+];
+let words = ["oath", "pea", "eat", "rain"];
+
+findWords(board, words);
