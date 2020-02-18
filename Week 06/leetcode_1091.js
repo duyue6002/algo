@@ -1,48 +1,58 @@
 /**
+ * 超时啊！！！！FUCK
  * @param {number[][]} grid
  * @return {number}
  */
 var shortestPathBinaryMatrix = function(grid) {
-  //BFS
-  let que = new Array();
-  let len = 1;
-  que.push({ i: 0, j: 0 });
-
-  while (que.length > 0) {
-    let i = 0,
-      end = que.length,
-      temp;
-    let q = new Array();
-    while (i < end) {
-      temp = que[i];
-      if (
-        temp.i < 0 ||
-        temp.j < 0 ||
-        temp.i >= grid.length ||
-        temp.j >= grid.length ||
-        grid[temp.i][temp.j] == 1
-      ) {
-        i++;
-        continue;
+  if ((grid && grid.length === 0) || (grid[0] && grid[0].length === 0))
+    return -1;
+  let n = grid.length;
+  let dx = [-1, -1, -1, 0, 0, 1, 1, 1];
+  let dy = [-1, 0, 1, -1, 1, -1, 0, 1];
+  let pq = [[0, 0, 0, 0]];
+  let visited = [];
+  while (pq.length !== 0) {
+    let [distance, i, j, he] = pq.shift();
+    visited.push([i, j]);
+    let step = distance - he;
+    if (i >= 0 && i < n && j >= 0 && j < n && grid[i][j] === 0) {
+      if (i === n - 1 && j === n - 1) {
+        return step + 1;
       }
-      if (temp.i == grid.length - 1 && temp.j == grid.length - 1) return len;
-      q.push({ i: temp.i, j: temp.j + 1 });
-      q.push({ i: temp.i, j: temp.j - 1 });
-      q.push({ i: temp.i + 1, j: temp.j });
-      q.push({ i: temp.i + 1, j: temp.j + 1 });
-      q.push({ i: temp.i + 1, j: temp.j - 1 });
-      q.push({ i: temp.i - 1, j: temp.j });
-      q.push({ i: temp.i - 1, j: temp.j + 1 });
-      q.push({ i: temp.i - 1, j: temp.j - 1 });
-
-      grid[temp.i][temp.j] = 1; //block back entry to itself
-      i++;
+      for (let k = 0; k < 8; k++) {
+        let x = i + dx[k],
+          y = j + dy[k];
+        if (
+          x >= 0 &&
+          x < n &&
+          y >= 0 &&
+          y < n &&
+          grid[x][y] === 0 &&
+          !visited.some(v => v[0] === x && v[1] === y)
+        ) {
+          pq.push([
+            distance + 1 + heuristic(x, y, n - 1),
+            x,
+            y,
+            he + heuristic(x, y, n - 1)
+          ]);
+        }
+      }
+    } else {
+      return -1;
     }
-    que = q;
-    len++;
+    pq.sort((a, b) => a[0] - b[0]);
   }
   return -1;
 };
-/*
 
-*/
+var heuristic = function(x, y, n) {
+  return Math.max(Math.abs(n - x), Math.abs(n - y));
+};
+
+shortestPathBinaryMatrix([
+  [0, 0, 1, 1],
+  [0, 0, 1, 1],
+  [0, 0, 0, 1],
+  [0, 0, 0, 0]
+]);
