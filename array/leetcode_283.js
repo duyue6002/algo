@@ -4,7 +4,7 @@
  * @param {number[]} nums
  * @return {void} Do not return anything, modify nums in-place instead.
  */
-var moveZeroes = function(nums) {
+var moveZeroes = function (nums) {
   for (let i = 0; i <= nums.length; i++) {
     if (nums[i] === 0) {
       // find no-zero number
@@ -26,9 +26,9 @@ var moveZeroes = function(nums) {
 
 /**
  * method 2
- * @param {*} nums 
+ * @param {*} nums
  */
-var moveZeroes = function(nums) {
+var moveZeroes = function (nums) {
   let j = 0;
   for (let i = 0; i < nums.length; i++) {
     if (nums[i] !== 0) {
@@ -38,5 +38,25 @@ var moveZeroes = function(nums) {
       }
       j++;
     }
+  }
+};
+
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var moveZeroes = function (nums) {
+  let left = 0,
+    right = 0;
+  while (left <= right && right < nums.length) {
+    if (nums[left] === 0) {
+      if (nums[right] !== 0) {
+        [nums[left], nums[right]] = [nums[right], nums[left]];
+        left++;
+      }
+    } else {
+      left++;
+    }
+    right++;
   }
 };
