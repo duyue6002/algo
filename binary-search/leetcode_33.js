@@ -20,4 +20,31 @@ var search = function(nums, target) {
   return left === right && nums[left] === target ? left : -1;
 };
 
-search([4, 5, 6, 7, 0, 1, 2], 7);
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var search = function(nums, target) {
+  let left = 0, right = nums.length - 1;
+  while (left < right) {
+    if (nums[left] < nums[right]) break;
+    let mid = (left + right) >> 1;
+    if (nums[mid] >= nums[left]) {
+      left = mid + 1;
+    } else {
+      right = mid;
+    }
+  }
+  const minIndex = left;
+  left = 0;
+  right = nums.length - 1;
+  while (left <= right) {
+    let mid = (left + right) >> 1;
+    let realmid = (minIndex + mid) % nums.length;
+    if (target === nums[realmid]) return realmid;
+    else if (target > nums[realmid]) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+};
