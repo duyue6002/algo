@@ -25,3 +25,21 @@ var lengthOfLongestSubstring = function(s) {
 };
 
 lengthOfLongestSubstring("abcabcbb");
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+  if (s.length === 0) return 0;
+  let map = new Map();
+  let res = 0;
+  for (let i = 0, j = 0; i < s.length; i++) {
+    if (map.has(s[i])) {
+      j = Math.max(j, map.get(s[i]) + 1);
+    }
+    map.set(s[i], i);
+    res = Math.max(res, i - j + 1);
+  }
+  return res;
+};
