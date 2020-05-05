@@ -42,4 +42,21 @@ var firstUniqChar = function(s) {
   return first === s.length ? -1 : first;
 };
 
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var firstUniqChar = function(s) {
+  let res = Array(s.length).fill(0);
+  for (let i = 0; i < s.length; i++) {
+    let index = s.indexOf(s[i]);
+    if (i === index) {
+      res[i] = 1;
+    } else {
+      res[index] = 0;
+    }
+  }
+  return res.indexOf(1);
+};
+
 firstUniqChar("leetcode");
